@@ -22,7 +22,7 @@ const MongoStore = require("connect-mongo")(session); // session값을 mongoDB�
     LOAD THE CONFIG
 ===============================*/
 const mongodbConfig = require("./server/config/mongodb"); // setup mongodb database url
-const port = process.env.PORT || 3000; // port
+const port = process.env.PORT || 4000; // port
 
 // define model
 // const userData = require("./models/user");
