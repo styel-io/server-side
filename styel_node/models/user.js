@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 
-let userSchema = new Schema(
+var userSchema = new Schema(
   {
     email: {
       type: String,
@@ -130,33 +130,18 @@ userSchema.path("password").validate(function(v) {
   }
 });
 
-// /* =============================
-//     HASH PASSWORD
-// ===============================*/
-// userSchema.pre("save", function(next) {
-//   let user = this;
-//   if (!user.isModified("password")) {
-//     return next();
-//   } else {
-//     user.password = bcrypt.hashSync(user.password);
-//     return next();
-//   }
-// });
-
-// /* =============================
-//     AUTHENTICATE
-// ===============================*/
-// userSchema.methods.authenticate = function(password) {
-//   let user = this;
-//   return bcrypt.compareSync(password, user.password);
-// };
-
 /* =============================
     ENCRYPT PASSWORD
 ===============================*/
-userSchema.methods.generateHash = function(password) {
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
+userSchema.pre("save", function(next) {
+  let user = this;
+  if (!user.isModified("password")) {
+    return next();
+  } else {
+    user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
+    return next();
+  }
+});
 
 /* =============================
     CONFIRM VALIDPASSWORD

@@ -25,36 +25,13 @@ const mongodbConfig = require("./server/config/mongodb"); // setup mongodb datab
 const port = process.env.PORT || 3000; // port
 
 // define model
-const userData = require("./models/user");
+// const userData = require("./models/user");
 
 // router
 const apiUsers = require("./routes/api/users");
 const apiAuth = require("./routes/api/auth");
 // const indexRouter = require("./routes/index")(express);
 // const usersRouter = require("./routes/user")(express, passport);
-
-/* =============================
-    CONNECT TO MONGODB SERVER
-===============================*/
-mongoose.connect(mongodbConfig.url, {
-  useNewUrlParser: true
-});
-
-// global.Promise를 mongoose.Promise에 대입했습니다. 기본 프로미스를(mPromise) 노드의 프로미스로 교체한 것.
-mongoose.Promise = global.Promise;
-
-mongoose.set("useCreateIndex", true);
-var db = mongoose.connection;
-db.on(
-  "error",
-  console.error.bind(
-    console,
-    "MongoDB Connection Error. Make sure MongoDB is running."
-  )
-);
-db.once("open", () => {
-  console.log("Connected to mongod server");
-});
 
 /* =============================
     EXPRESS CONFIGURATION
@@ -161,8 +138,35 @@ app.use((err, req, res, next) => {
 });
 
 /* =============================
+    CONNECT TO MONGODB SERVER
+===============================*/
+mongoose.connect(mongodbConfig.url, {
+  useNewUrlParser: true
+});
+
+// global.Promise를 mongoose.Promise에 대입했습니다. 기본 프로미스를(mPromise) 노드의 프로미스로 교체한 것.
+mongoose.Promise = global.Promise;
+
+mongoose.set("useCreateIndex", true);
+var db = mongoose.connection;
+db.on(
+  "error",
+  console.error.bind(
+    console,
+    "MongoDB Connection Error. Make sure MongoDB is running."
+  )
+);
+db.once("open", () => {
+  console.log("Connected to mongod server");
+});
+
+/* =============================
     OPEN SERVER
 ===============================*/
 app.listen(port, () => {
   console.log(`Express Server is running on port ${port}`);
 });
+
+// Reference
+
+// JWT & Bcrypt : https://blog.naver.com/dlghks44/221266674043

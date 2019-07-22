@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
 const User = require("../../models/user");
 const util = require("../../util");
 
@@ -16,10 +17,8 @@ router.get("/", util.isLoggedin, function(req, res, next) {
 
 // create
 router.post("/", function(req, res, next) {
-  var newUser = new User();
-  newUser.username = username;
-  newUser.email = email;
-  newUser.password = newUser.generateHash(password);
+  let newUser = new User(req.body);
+  console.log(newUser);
   newUser.save(function(err, user) {
     res.json(err || !user ? util.successFalse(err) : util.successTrue(user));
   });
@@ -45,8 +44,8 @@ router.put("/:username", util.isLoggedin, checkPermission, function(
 
       // update user object
       user.originalPassword = user.password; // originPassword에 받아온 password를 넣는다.
-      user.password = req.body.generateHash(newPassword)
-        ? req.body.generateHash(newPassword)
+      user.password = req.body.newPassword
+        ? req.body.newPassword
         : user.password;
       for (var p in req.body) {
         user[p] = req.body[p]; // user에 body의 내용을 추가한다.
