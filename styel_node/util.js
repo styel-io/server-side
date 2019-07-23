@@ -45,6 +45,7 @@ util.parseError = function(errors) {
 // middlewares
 util.isLoggedin = function(req, res, next) {
   let token = req.headers["x-access-token"];
+  console.log(token);
   if (!token) return res.json(util.successFalse(null, "token is required!"));
   else {
     // jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) { // 환경 변수에 등록된 JWT_SECRET 접근, 여기서는 간단하게 nodejs에 넣어서 사용합니다.

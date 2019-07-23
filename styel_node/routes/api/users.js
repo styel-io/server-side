@@ -20,9 +20,8 @@ router.post("/", function(req, res, next) {
   let newUser = new User(req.body);
   console.log(newUser);
   newUser.save(function(err, user) {
-    // res.json(err || !user ? util.successFalse(err) : util.successTrue(user));
+    res.json(err || !user ? util.successFalse(err) : util.successTrue(user));
     console.log(err || !user ? util.successFalse(err) : util.successTrue(user));
-    res.redirect("back");
   });
 });
 

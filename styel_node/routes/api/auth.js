@@ -60,7 +60,6 @@ router.post(
             if (err) return res.json(util.successFalse(err));
             res.json(util.successTrue(token));
             console.log(util.successTrue(token));
-            console.log(req.headers["x-access-token"]);
           });
         }
       });
