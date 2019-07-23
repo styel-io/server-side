@@ -30,15 +30,22 @@ router.post(
   },
   function(req, res, next) {
     User.findOne({ username: req.body.username })
-      .select({ password: 1, username: 1, email: 1 })
+      .select({ password: 1, username: 1 })
       .exec(function(err, user) {
-        if (err) return res.json(util.successFalse(err));
-        else if (!user || !user.validPassword(req.body.password))
+        // if (err) return res.json(util.successFalse(err));
+        if (err) {
+          console.log(util.successFalse(err));
+          return;
+        } else if (!user || !user.validPassword(req.body.password)) {
           // 데이터 베이스에 user가 없을 경우 또는 아이디와 비밀번호가 일치하지 않을 경우
-          return res.json(
+          // return res.json(
+          //   util.successFalse(null, "Username or Password is invalid")
+          // );
+          console.log(
             util.successFalse(null, "Username or Password is invalid")
           );
-        else {
+          return;
+        } else {
           var payload = {
             _id: user._id,
             username: user.username
@@ -52,6 +59,8 @@ router.post(
           jwt.sign(payload, secretOrPrivateKey, options, function(err, token) {
             if (err) return res.json(util.successFalse(err));
             res.json(util.successTrue(token));
+            console.log(util.successTrue(token));
+            console.log(req.headers["x-access-token"]);
           });
         }
       });
@@ -64,6 +73,7 @@ router.get("/me", util.isLoggedin, function(req, res, next) {
   User.findById(req.decoded._id).exec(function(err, user) {
     if (err || !user) return res.json(util.successFalse(err));
     res.json(util.successTrue(user));
+    console.log(util.successTrue(user));
   });
 });
 

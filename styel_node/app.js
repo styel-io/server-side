@@ -5,10 +5,10 @@ const express = require("express");
 const path = require("path"); // 윈도우, unix등의 경로 호환 문제 해결 window: \bin\www, unix: /bin/www
 
 const session = require("express-session");
-const passport = require("passport"); // 세션 미들웨어
+// const passport = require("passport"); // 세션 미들웨어
 const bcrypt = require("bcryptjs"); // 암호화 모듈
 const jwt = require("jsonwebtoken"); // Json Web Token 인증 모듈
-const cookieparser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 
 const fs = require("fs"); // 파일 생성, 삭제 등 컨트롤
 
@@ -60,7 +60,7 @@ app.use(morgan("dev"));
 // set the secret key variable for jwt
 app.set("jwt-secret", mongodbConfig.secret);
 
-app.use(cookieparser());
+app.use(cookieParser());
 
 // flash message // connect-flash 모듈 사용
 app.use(flash());
@@ -80,25 +80,25 @@ app.engine("html", require("ejs").renderFile);
     PASSPORT
 ===============================*/
 // passport session
-app.use(
-  session({
-    secret: "rkswlrGhkdlxld", // 쿠키를 임의로 변조하는것을 방지하기 위한 sign값. 원하는 값을 넣어주자
-    resave: false, // 세션을 언제나(변하지 않아도)) 저장할 것인지 정하는 값. express-session documentation에서는 이 값을 false로 하는것을 권장하고 필요에 따라 true로 설정.
-    saveUninitialized: true, // uninitialized 세션이란 새로 생겼지만 변경되지 않은 세션을 의미한다. true로 설정 할 것을 권장한다.
-    // store: new FileStore() // session-file-store 모듈을 사용해서 세션값을 저장한다
-    store: new MongoStore({
-      url: mongodbConfig.url,
-      collection: "sessions"
-    })
-  })
-);
+// app.use(
+//   session({
+//     secret: "rkswlrGhkdlxld", // 쿠키를 임의로 변조하는것을 방지하기 위한 sign값. 원하는 값을 넣어주자
+//     resave: false, // 세션을 언제나(변하지 않아도)) 저장할 것인지 정하는 값. express-session documentation에서는 이 값을 false로 하는것을 권장하고 필요에 따라 true로 설정.
+//     saveUninitialized: true, // uninitialized 세션이란 새로 생겼지만 변경되지 않은 세션을 의미한다. true로 설정 할 것을 권장한다.
+//     // store: new FileStore() // session-file-store 모듈을 사용해서 세션값을 저장한다
+//     store: new MongoStore({
+//       url: mongodbConfig.url,
+//       collection: "sessions"
+//     })
+//   })
+// );
 
 // setup passport
 // require("./server/config/passport")(passport);
 // Initialize passport auth
-app.use(passport.initialize());
+// app.use(passport.initialize());
 // 영구적인 로그인 세션
-app.use(passport.session());
+// app.use(passport.session());
 
 // // session 값을 전역(모든페이지)에서 사용 할 수 있게 해준다.
 // app.use((req, res, next) => {
